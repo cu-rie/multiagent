@@ -12,6 +12,7 @@ NODE_ENEMY = 1
 EDGE_ALLY = 0
 EDGE_ENEMY = 1
 
+
 def minus_large_num_initializer(shape, dtype, ctx, id_range):
     return torch.ones(shape, dtype=dtype, device=ctx) * - VERY_LARGE_NUMBER
 
@@ -23,20 +24,12 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
 
     g = dgl.DGLGraph()
 
-    # using minus_large_num_initializer for node features matters a lot !
-    # working as a mask for computing action probs later.
     g.set_n_initializer(minus_large_num_initializer)
     g.set_e_initializer(dgl.init.zero_initializer)
 
-    allies = env.agents
-    n_allies = env.n_agents
-    enemies = env.enemies
-    n_enemies = env.n_enemies
+    num_agents = len(env.agents)
 
     nfs = []
-
-    allies_pos_x = [unit.pos.x for unit in allies.values() if unit.health > 0]
-    allies_pos_y = [unit.pos.y for unit in allies.values() if unit.health > 0]
 
     if len(allies_pos_x) == 0:
         allies_center_pos_x = 0
@@ -139,6 +132,7 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
                 {'edge_type': e_to_a_edge_type.repeat(num_e_to_a_edges)})
 
     return g
+
 
 def cartesian_product(*iterables, return_1d=False, self_edge=False):
     if return_1d:

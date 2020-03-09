@@ -2,7 +2,7 @@ from functools import partial
 import dgl
 import torch
 
-from src.utils.ally_graph import NODE_ALLY, NODE_DEAD, EDGE_SELF, NODE_ENEMY
+from src.utils.graph_func import NODE_ALLY, NODE_DEAD, EDGE_SELF, NODE_ENEMY
 VERY_LARGE_NUMBER = -99999
 
 
