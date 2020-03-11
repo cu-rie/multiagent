@@ -41,7 +41,7 @@ class MLP_Agent(torch.nn.Module):
     def push(self, state, action, n_state, reward, terminal):
         self.memory.push(state, action, n_state, reward, terminal)
         if terminal:
-            self.eps *= max(self.eps * self.eps_decay, self.eps_min)
+            self.eps = max(self.eps * self.eps_decay, self.eps_min)
 
     def fit(self):
         transitions = self.memory.sample(self.batch_size)
