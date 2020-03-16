@@ -25,8 +25,8 @@ class GraphAgent(BaseAgent):
         self.random_action = torch.distributions.Multinomial(1, probs=random_prob)
 
         self.update_target(src=self.brain, target=self.target)
-        self.eps = 0.5
-        self.eps_decay = 0.995
+        self.eps = 0.9
+        self.eps_decay = 0.996
         self.gamma = 0.99
         self.eps_min = 0.01
 

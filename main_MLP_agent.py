@@ -35,7 +35,7 @@ if __name__ == '__main__':
         ep_ally_reward = 0
         ep_adversary_reward = 0
         while True:
-            env.render()
+            # env.render()
 
             action = [agent(curr_s) for agent, curr_s in zip(agents, curr_state)]
             next_state, reward, _done, info = env.step(action)

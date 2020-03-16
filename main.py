@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     env = make_env_tag()
 
-    max_episodes = 1000
+    max_episodes = 10000
     max_t = 25
     curr_state = env.reset()
     curr_g = state2graphfunc(env, curr_state)
