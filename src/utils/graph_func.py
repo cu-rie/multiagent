@@ -18,9 +18,8 @@ def minus_large_num_initializer(shape, dtype, ctx, id_range):
 
 
 def state2graphfunc(env: MultiAgentEnv, obs, device=None):
-    feat_shape = env.observation_space
-
-    adversary_type = [a.adversary for a in env.agents]
+    # adversary_type = [a.adversary for a in env.agents]
+    node_type = [NODE_ALLY if a.adversary else NODE_ENEMY for a in env.agents]
 
     g = dgl.DGLGraph()
 
@@ -30,6 +29,8 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
     num_agents = len(env.agents)
 
     g.add_nodes(num_agents)
+    g.ndata['node_feature'] = torch.Tensor(obs).to(device)
+    g.ndata['node_type'] = torch.Tensor(node_type).reshape(-1, 1).to(device)
 
     return g
 

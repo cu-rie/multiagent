@@ -329,6 +329,8 @@ if __name__ == '__main__':
     env = PredatorPreyEnv()
 
     env.reset()
+    env.step()
+    # env.init_curses()
     # env.render()
-    env.observation_space
+    # env.observation_space
 

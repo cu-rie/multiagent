@@ -11,15 +11,15 @@ def make_env():
     world = scenario.make_world()
     # create multi-agent environment
     env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation)
-    return env
+    return scenario, env
 
 
 if __name__ == '__main__':
 
-    env = make_env()
+    scinario, env = make_env()
 
     max_episodes = 100
-    max_t = 25
+    max_t = 100
     obs = env.reset()
     t = 0
 
@@ -30,8 +30,8 @@ if __name__ == '__main__':
         while True:
             graph = state2graphfunc(env, obs)
 
-            action = [[1, 1, 1, 0, 0] for _ in range(len(obs))]
-            # action = [np.random.multinomial(1, [1/5]*5) for _ in range(len(obs))]
+            action = agent.get_action(graph)
+
             obs, reward, _done, info = env.step(action)
             t += 1
             ep_reward += sum(reward)

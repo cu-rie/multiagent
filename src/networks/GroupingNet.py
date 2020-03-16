@@ -2,7 +2,7 @@ import dgl
 import torch
 import torch.nn as nn
 
-from src.modules.nn.RelationalGraphNetwork import RelationalGraphNetwork, RelationalGraphNetworkConfig
+from src.networks.RelationalGraphNetwork import RelationalGraphNetwork, RelationalGraphNetworkConfig
 from src.modules.nn.AttentionGrouping import AttentionGrouping
 from src.modules.nn.LinearGrouping import LinearGrouping
 
@@ -11,7 +11,6 @@ from src.utils.ConfigBase import ConfigBase
 
 from src.utils.graph_func import NODE_ALLY
 from src.utils.graph_util import get_filtered_node_index_by_type, get_largest_number_of_enemy_nodes
-from src.utils.graph_util import dn
 
 
 class GroupingNetConfig(ConfigBase):
