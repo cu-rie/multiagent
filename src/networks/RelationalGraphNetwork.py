@@ -1,6 +1,6 @@
 import torch.nn as nn
 from src.modules.nn.RelationalGraphLayer import RelationalGraphLayer
-from src.utils.graph_func import NODE_ALLY, NODE_ENEMY, EDGE_ALLY, EDGE_ENEMY, EDGE_SELF
+from src.utils.graph_func import NODE_ALLY, NODE_ENEMY, EDGE_ALLY, EDGE_ENEMY
 from src.modules.nn.MLP import MLPConfig
 from src.utils.ConfigBase import ConfigBase
 
@@ -17,7 +17,7 @@ class RelationalGraphNetworkConfig(ConfigBase):
             'init_node_dim': 9,
             'num_hidden_layers': 1,
             'node_types': [NODE_ALLY, NODE_ENEMY],
-            'edge_types': [EDGE_ALLY, EDGE_ENEMY, EDGE_SELF],
+            'edge_types': [EDGE_ALLY, EDGE_ENEMY],
             'updater_conf': MLPConfig().mlp,
             'use_residual': False,
             'use_concat': True,

@@ -52,3 +52,8 @@ def cartesian_product(*iterables, return_1d=False, self_edge=False):
     else:
         ret = [i for i in itertools.product(*iterables)]
     return ret
+
+def get_filtered_node_index_by_type(graph, ntype_idx):
+    filter_func = partial(filter_by_node_type_idx, ntype_idx=ntype_idx)
+    node_idx = graph.filter_nodes(filter_func)
+    return node_idx

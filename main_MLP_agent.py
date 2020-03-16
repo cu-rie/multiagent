@@ -1,6 +1,6 @@
 from multiagent.environment import MultiAgentEnv
 from scenarios.simple_tag import Scenario
-from src.agents.MLPAgent import MLP_Agent
+from src.agents.Qagent import MLP_Agent
 import matplotlib.pyplot as plt
 
 
