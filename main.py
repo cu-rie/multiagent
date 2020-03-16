@@ -1,7 +1,9 @@
+import matplotlib.pyplot as plt
+
 from multiagent.environment import MultiAgentEnv
 from scenarios.simple_tag import Scenario
 from src.agents.graphagent import GraphAgent
-import matplotlib.pyplot as plt
+from src.utils.graph_func import state2graphfunc
 
 
 def make_env_tag():
@@ -21,6 +23,7 @@ if __name__ == '__main__':
     max_episodes = 1000
     max_t = 25
     curr_state = env.reset()
+    curr_g = state2graphfunc(env, curr_state)
     t = 0
     fit_interval = 10
     batch_size = 100
@@ -35,14 +38,15 @@ if __name__ == '__main__':
         ep_ally_reward = 0
         ep_adversary_reward = 0
         while True:
-            env.render()
+            # env.render()
 
-            action = [agent(curr_s) for agent, curr_s in zip(agents, curr_state)]
+            action, argmax_action = agent(curr_g)
             next_state, reward, _done, info = env.step(action)
+            next_g = state2graphfunc(env, next_state)
             t += 1
 
-            for rwd, agent in zip(reward, env.agents):
-                if agent.adversary:
+            for rwd, ag in zip(reward, env.agents):
+                if ag.adversary:
                     ep_adversary_reward += rwd
                 else:
                     ep_ally_reward += rwd
@@ -50,24 +54,22 @@ if __name__ == '__main__':
             done = all(_done)
             terminal = (t >= max_t)
 
-            for ag, st, ac, ns, rw in zip(agents, curr_state, action, next_state, reward):
-                ag.push(st, ac, ns, rw, terminal)
+            agent.push(curr_g, argmax_action, next_g, reward, terminal)
 
-            curr_state = next_state
+            curr_g = next_g
 
             if done or terminal:
                 curr_state = env.reset()
                 t = 0
-                epsilons.append(agents[0].eps)
+                epsilons.append(agent.eps)
                 print("EP:{}, Ally_RWD:{:.2f}, Enemy_RWD:{:.2f}, EPS:{:.2f}".format(e, ep_ally_reward,
-                                                                                    ep_adversary_reward, agents[0].eps))
+                                                                                    ep_adversary_reward, agent.eps))
                 ally_rewards.append(ep_ally_reward)
                 enemy_rewards.append(ep_adversary_reward)
                 break
 
-        if e % fit_interval == 0 and len(agents[0].memory) > batch_size:
-            for agent in agents:
-                agent.fit()
+        if e % fit_interval == 0 and len(agent.memory) > agent.batch_size:
+            agent.fit()
 
     fig = plt.figure()
     ax = fig.add_subplot(2, 1, 1)
@@ -78,4 +80,4 @@ if __name__ == '__main__':
     ax2 = fig.add_subplot(2, 1, 2)
     ax2.plot(epsilons)
 
-    plt.savefig('reward_MLP.png')
+    plt.savefig('reward_graph.png')

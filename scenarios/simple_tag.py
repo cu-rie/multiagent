@@ -142,6 +142,7 @@ class Scenario(BaseScenario):
             if not other.adversary:
                 other_vel.append(other.state.p_vel)
 
+        # prev version
         # return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + other_vel)
         return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos)
 

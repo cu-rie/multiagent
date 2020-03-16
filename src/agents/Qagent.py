@@ -17,7 +17,7 @@ class MLP_Agent(torch.nn.Module):
         self.memory = ReplayMemory(capacity=10000)
         random_prob = torch.Tensor([1 / action_space.n for _ in range(action_space.n)])
         self.random_action = torch.distributions.Multinomial(1, probs=random_prob)
-        self.n_actions = action_space.n
+
         self.batch_size = batch_size
         self.eps = 0.99
         self.eps_decay = 0.995
@@ -28,7 +28,7 @@ class MLP_Agent(torch.nn.Module):
 
     def forward(self, observation):
         # random action
-        if random.random() >= self.eps:
+        if random.random() <= self.eps:
             action = self.random_action.sample()
         else:
             obs = torch.Tensor(observation)
