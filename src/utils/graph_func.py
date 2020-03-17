@@ -23,7 +23,9 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
     ally_idx = []
     enemy_idx = []
     node_type = []
+    pos = []
 
+    # prepare ndata
     for i, a in enumerate(env.agents):
         if a.adversary:
             node_type.append(NODE_ENEMY)
@@ -31,6 +33,7 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
         else:
             node_type.append(NODE_ALLY)
             ally_idx.append(i)
+        pos.append(a.state.p_pos)
 
     g = dgl.DGLGraph()
 
@@ -38,13 +41,11 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
     g.set_e_initializer(dgl.init.zero_initializer)
 
     num_agents = len(env.agents)
-    num_ally = len(ally_idx)
-    num_enemy = len(enemy_idx)
 
     g.add_nodes(num_agents)
-    # g.ndata['node_feature'] = torch.Tensor(obs).to(device)
     g.ndata['init_node_feature'] = torch.Tensor(obs).to(device)
     g.ndata['node_type'] = torch.Tensor(node_type).reshape(-1, 1).to(device)
+    g.ndata['pos'] = torch.Tensor(pos).to(device)
 
     a2a_edge = cartesian_product(ally_idx, ally_idx)
     e2a_edge = cartesian_product(enemy_idx, ally_idx)

@@ -25,7 +25,7 @@ class GraphAgent(BaseAgent):
         self.random_action = torch.distributions.Multinomial(1, probs=random_prob)
 
         self.update_target(src=self.brain, target=self.target)
-        self.eps = 0.9
+        self.eps = 0.99
         self.eps_decay = 0.996
         self.gamma = 0.99
         self.eps_min = 0.01
@@ -48,8 +48,6 @@ class GraphAgent(BaseAgent):
 
     def push(self, state, action, n_state, reward, terminal):
         self.memory.push(state, action, n_state, reward, terminal)
-        if terminal:
-            self.eps = max(self.eps * self.eps_decay, self.eps_min)
 
     def fit(self):
         transitions = self.sample_from_memory()
@@ -88,6 +86,8 @@ class GraphAgent(BaseAgent):
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+
+        self.update_eps()
 
     @staticmethod
     def convert_action_to_one_hot(num_actions, argmax_action):

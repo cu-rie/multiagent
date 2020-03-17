@@ -32,3 +32,6 @@ class BaseAgent(torch.nn.Module):
 
     def sample_from_memory(self):
         return self.memory.sample(self.batch_size)
+
+    def update_eps(self):
+        self.eps = max(self.eps * self.eps_decay, self.eps_min)

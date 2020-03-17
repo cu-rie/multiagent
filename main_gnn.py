@@ -1,3 +1,4 @@
+import torch
 import matplotlib.pyplot as plt
 
 from multiagent.environment import MultiAgentEnv
@@ -18,12 +19,14 @@ def make_env_tag():
 
 if __name__ == '__main__':
 
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+
     env = make_env_tag()
 
     max_episodes = 10000
     max_t = 25
     curr_state = env.reset()
-    curr_g = state2graphfunc(env, curr_state)
+    curr_g = state2graphfunc(env, curr_state, device)
     t = 0
     fit_interval = 10
     batch_size = 100
@@ -32,7 +35,7 @@ if __name__ == '__main__':
     enemy_rewards = []
     epsilons = []
 
-    agent = GraphAgent(env.observation_space, env.action_space)
+    agent = GraphAgent(env.observation_space, env.action_space).to(device)
 
     for e in range(max_episodes):
         ep_ally_reward = 0
@@ -42,7 +45,7 @@ if __name__ == '__main__':
 
             action, argmax_action = agent(curr_g)
             next_state, reward, _done, info = env.step(action)
-            next_g = state2graphfunc(env, next_state)
+            next_g = state2graphfunc(env, next_state, device)
             t += 1
 
             for rwd, ag in zip(reward, env.agents):
