@@ -72,7 +72,7 @@ if __name__ == '__main__':
                 break
 
         if e % fit_interval == 0 and len(agent.memory) > agent.batch_size:
-            agent.fit()
+            agent.fit(device)
 
     fig = plt.figure()
     ax = fig.add_subplot(2, 1, 1)

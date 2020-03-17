@@ -49,7 +49,7 @@ class GraphAgent(BaseAgent):
     def push(self, state, action, n_state, reward, terminal):
         self.memory.push(state, action, n_state, reward, terminal)
 
-    def fit(self):
+    def fit(self, device=None):
         transitions = self.sample_from_memory()
 
         curr_g = []
@@ -66,10 +66,10 @@ class GraphAgent(BaseAgent):
             terminal.extend([sample.terminal for _ in range(self.n_agents)])
 
         s = dgl.batch(curr_g)
-        a = torch.stack(action).reshape(-1, 1)
-        r = torch.Tensor(reward)
+        a = torch.stack(action).reshape(-1, 1).to(device)
+        r = torch.Tensor(reward).to(device)
         ns = dgl.batch(next_g)
-        terminal = torch.BoolTensor(terminal)
+        terminal = torch.BoolTensor(terminal).to(device)
 
         nf_before = s.ndata['init_node_feature']
         state_action_value = self.brain(s, nf_before).gather(1, a)
