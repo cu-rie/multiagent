@@ -44,7 +44,7 @@ class GraphAgent(BaseAgent):
         else:
             argmax_action = Q.argmax(dim=1)
             action = self.convert_action_to_one_hot(self.n_actions, argmax_action)
-        return action, argmax_action
+        return action, argmax_action.cpu()
 
     def push(self, state, action, n_state, reward, terminal):
         self.memory.push(state, action, n_state, reward, terminal)
@@ -96,4 +96,4 @@ class GraphAgent(BaseAgent):
         for agent_idx, action in enumerate(argmax_action):
             out_action[agent_idx, action] = 1
 
-        return out_action
+        return out_action.cpu().detach()

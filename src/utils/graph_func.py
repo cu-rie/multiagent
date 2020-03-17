@@ -53,9 +53,9 @@ def state2graphfunc(env: MultiAgentEnv, obs, device=None):
     len_a2a = len(a2a_edge[0])
     len_e2a = len(e2a_edge[0])
 
-    g.add_edges(a2a_edge[0], a2a_edge[1], {'edge_type': torch.Tensor(data=(EDGE_ALLY,)).repeat(len_a2a)})
-    g.add_edges(e2a_edge[0], e2a_edge[1], {'edge_type': torch.Tensor(data=(EDGE_ENEMY,)).repeat(len_e2a)})
-    g.add_edges(range(num_agents), range(num_agents), {'edge_type': torch.Tensor(data=(EDGE_SELF,)).repeat(num_agents)})
+    g.add_edges(a2a_edge[0], a2a_edge[1], {'edge_type': torch.Tensor(data=(EDGE_ALLY,)).repeat(len_a2a).to(device)})
+    g.add_edges(e2a_edge[0], e2a_edge[1], {'edge_type': torch.Tensor(data=(EDGE_ENEMY,)).repeat(len_e2a).to(device)})
+    g.add_edges(range(num_agents), range(num_agents), {'edge_type': torch.Tensor(data=(EDGE_SELF,)).repeat(num_agents).to(device)})
 
     return g
 
