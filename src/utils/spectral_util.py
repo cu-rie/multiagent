@@ -34,7 +34,7 @@ def spectral_cluster(g: dgl.DGLGraph, key=None):
             dist_matrix[i, j] = dist
             dist_matrix[j, i] = dist
 
-            similarity_matrix[i, j] = (nf[i] * nf[j]).sum()
+            similarity_matrix[i, j] = (nf[i0] * nf[j]).sum()
 
     min_dist = dist_matrix.min()
     for i in range(n):
